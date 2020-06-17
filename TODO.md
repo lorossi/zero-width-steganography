@@ -4,7 +4,7 @@
 1. create requirements.txt file
 2. comment code in a decent way *WIP*
 3. ~~do some testing~~ **DONE**
-4. find some more descriptive names for the methods - *i believe they are descriptive enough*
+4. find some more descriptive names for the methods *WIP*
 5. git squash and go public
 6. ~~convert function arguments in \*\*kwargs~~ **DONE**
 
