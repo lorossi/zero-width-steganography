@@ -139,9 +139,13 @@ class ZeroWidth():
         elif kwargs["position"] == "random":
 
             if kwargs["occasions"][0] >  len(self.lines):
-                raise "There can't be more occasions than lines. Aborting"
+                raise Exception("There can't be more occasions than lines. Aborting")
+
+            if kwargs["occasions"][0] < len(self.text_encoded) - 1:
+                raise Exception("There can't be less occasions than lines of text to be encoded. Aborting")
 
             chosen_lines = []
+            current_encoded = 0
             for x in range(kwargs["occasions"][0]):
                 found = False
 
@@ -153,6 +157,10 @@ class ZeroWidth():
 
                     if random_line in chosen_lines:
                         continue
+
+                    if len(chosen_lines) >= len(self.lines):
+                        raise Exception("There are not enough lines in the source file. Aborting. HINT every line eligible should be at least 2 wide")
+
 
                     chosen_lines.append(random_line)
 
@@ -168,9 +176,8 @@ class ZeroWidth():
                     else:
                         found = True
 
-                random_encoded = randint(0, len(self.text_encoded) - 2)
-
-                self.lines[random_line] = self.lines[random_line][:random_pos] + self.text_encoded[random_encoded]["text"] + self.lines[random_line][random_pos:]
+                self.lines[random_line] = self.lines[random_line][:random_pos] + self.text_encoded[current_encoded]["text"] + self.lines[random_line][random_pos:]
+                current_encoded = (current_encoded + 1) % (len(self.text_encoded) - 1)
 
         self.output_buffer = "".join(line + '\n' for line in self.lines)
         return len(self.lines)
