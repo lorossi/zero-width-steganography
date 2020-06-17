@@ -6,6 +6,7 @@
 3. do some testing
 4. find some more descriptive names for the methods
 5. git squash and go public
+6. ~~convert function arguments in \*\*kwargs~~ **DONE**
 
 ## INTERFACE
 1. add colored interface
