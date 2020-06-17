@@ -2,7 +2,7 @@ from random import randint, choice
 
 class ZeroWidth():
     def __init__(self):
-        self.text_clear = []
+        self.clear_text = []
         self.text_encoded = []
         self.raw = ""
         # maps bits to spaces
@@ -14,16 +14,18 @@ class ZeroWidth():
         # reverses the "character_map" dict so we can map spaces to bits
         self.space_map = {v: k for k, v in self.character_map.items()}
 
-    def setClearText(self, text_clear):
-        # text_clear can be both string or list. We want to differentiate
-        if isinstance(text_clear, str):
-            new_dict = {"text" : text_clear}
-            self.text_clear.append(new_dict)
+    def setClearText(self, clear_text):
+        # THESE ARE THE STRINGS THAT WILL BE HIDDEN
+        # clear_text can be both string or list. We want to differentiate
+        if isinstance(clear_text, str):
+            new_dict = {"text" : clear_text}
+            self.clear_text.append(new_dict)
         else:
-            for t in text_clear:
+            for t in clear_text:
                 new_dict = {"text" : t}
-                self.text_clear.append(new_dict)
-        # text_clear is now list of dicts, each of one has a "text" field
+                self.clear_text.append(new_dict)
+
+        # clear_text is now list of dicts, each of one has a "text" field
         #   containing the clear text
 
     def setEncodedText(self, text_encoded):
@@ -56,7 +58,7 @@ class ZeroWidth():
     def zeroEncode(self):
         self.text_encoded = []
 
-        for text in self.text_clear:
+        for text in self.clear_text:
             # we read the chars and convert it to bits
             self.raw_bits = "".join(format(ord(c), '09b') for c in text["text"])
             self.bits = ""
@@ -70,11 +72,10 @@ class ZeroWidth():
         # the last dict of the list contains all encoded text in a single string
         all_dict = {"all" : "".join(t["text"] for t in self.text_encoded)}
         self.text_encoded.append(all_dict)
-
         return self.text_encoded
 
     def zeroDecode(self):
-        self.text_clear = []
+        self.clear_text = []
         for text in self.text_encoded:
             new_dict = {}
             self.decoded = "".join(self.space_map[s] for s in text["text"])
@@ -86,12 +87,12 @@ class ZeroWidth():
 
             new_dict["text"] = new_dict["text"].rstrip()
             new_dict["line"] = text["line"]
-            self.text_clear.append(new_dict)
-        return self.text_clear
+            self.clear_text.append(new_dict)
+        return self.clear_text
 
     def zeroDecodeString(self):
         self.decoded_string = ""
-        for dict in self.text_clear:
+        for dict in self.clear_text:
             newl = "\n"
             tab = "\t"
             output = (
@@ -103,6 +104,9 @@ class ZeroWidth():
         self.decoded_string = self.decoded_string.rstrip()
         self.output_buffer = self.decoded_string
         return self.decoded_string
+
+    def readSource(self, source):
+        self.raw = source
 
     def readFile(self, path):
         with open(path, 'r', encoding='utf-8-sig') as f:
@@ -145,7 +149,7 @@ class ZeroWidth():
             if kwargs["occasions"][0] >  len(self.lines):
                 raise Exception("There can't be more occasions than lines. Aborting")
 
-            if kwargs["occasions"][0] < len(self.text_encoded) - 1:
+            if kwargs["occasions"][0] < len(self.text_encoded) - 2:
                 raise Exception("There can't be less occasions than lines of text to be encoded. Aborting")
 
             available_lines = []
