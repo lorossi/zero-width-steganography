@@ -5,13 +5,17 @@ class ZeroWidth():
         self.text_clear = []
         self.text_encoded = []
         self.raw = ""
+        # maps bits to spaces
         self.character_map = {
             "0" : u'\u200B', # ZERO WIDTH SPACE
             "1" : u'\uFEFF' # ZERO WIDTH NO-BREAK SPACE
         }
+
+        # reverses the "character_map" dict so we can map spaces to bits
         self.space_map = {v: k for k, v in self.character_map.items()}
 
     def setClearText(self, text_clear):
+        # text_clear can be both string or list. We want to differentiate
         if isinstance(text_clear, str):
             new_dict = {"text" : text_clear}
             self.text_clear.append(new_dict)
@@ -19,11 +23,15 @@ class ZeroWidth():
             for t in text_clear:
                 new_dict = {"text" : t}
                 self.text_clear.append(new_dict)
+        # text_clear is now list of dicts, each of one has a "text" field
+        #   containing the clear text
 
     def setEncodedText(self, text_encoded):
         if not text_encoded.endswith("\n"):
             text_encoded += "\n"
         self.text_encoded = [{"text" : text_encoded, "line" : 1}]
+        # text_encoded is now a list of dicts
+        # should probably make multiple dicts? don't really know why it's a single dict
 
     def searchEncodedText(self):
         self.text_encoded = []
@@ -46,11 +54,14 @@ class ZeroWidth():
         return False
 
     def zeroEncode(self):
+        self.text_encoded = []
+        
         for text in self.text_clear:
+            # we read the chars and convert it to bits
             self.raw_bits = "".join(format(ord(c), '09b') for c in text["text"])
             self.bits = ""
             for r in self.raw_bits:
-                if ord(r) != 65279:
+                if ord(r) != 65279: # BOM mark
                     self.bits += r
             new_dict = {}
             new_dict["text"] = "".join(self.character_map[b] for b in self.bits)
