@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, choice
 
 class ZeroWidth():
     def __init__(self):
@@ -112,7 +112,10 @@ class ZeroWidth():
         with open(path, 'w',  encoding='utf-8-sig') as f:
             f.write(self.output_buffer)
 
-    #def emdedEncoded(self, position="top", lines=None, occasions=1):
+    # kwargs:
+    #   position = lines|nth|top|bottom|random
+    #   occasions = (int)
+    #   lines = (int)
     def embedEncoded(self, **kwargs):
         self.lines = self.raw.splitlines()
         if self.lines == []:
@@ -126,9 +129,10 @@ class ZeroWidth():
                 linecount += 1
 
         elif kwargs["position"] == "nth":
+            textcount = 0
             for i in range(1, len(self.lines) - 1, kwargs["occasions"][0]):
-                index = (i - 1) % (len(self.text_encoded) - 1)
-                self.lines[i-1] += self.text_encoded[index]["text"]
+                self.lines[i-1] += self.text_encoded[textcount]["text"]
+                textcount = (textcount + 1) % (len(self.text_encoded) - 1)
 
         elif kwargs["position"] == "top":
             self.lines[0] += self.text_encoded[-1]["all"]
@@ -144,33 +148,24 @@ class ZeroWidth():
             if kwargs["occasions"][0] < len(self.text_encoded) - 1:
                 raise Exception("There can't be less occasions than lines of text to be encoded. Aborting")
 
-            chosen_lines = []
+            available_lines = []
+            for i in range(0, len(self.lines) - 1):
+                if len(self.lines[i]) > 2:
+                    available_lines.append(i)
+
+            if len(available_lines) < kwargs["occasions"][0]:
+                raise Exception("There are not enough available lines in the source file. Every line available should be at least 2 characters wide. Aborting.")
+
             current_encoded = 0
             for x in range(kwargs["occasions"][0]):
+
+                random_line = choice(available_lines)
+                available_lines.remove(random_line)
+                current_line = self.lines[random_line]
+
                 found = False
-
                 while not found:
-                    if len(self.lines) == 1:
-                        random_line = 0
-                    else:
-                        random_line = randint(0, len(self.lines) - 1)
-
-                    if random_line in chosen_lines:
-                        continue
-
-                    if len(chosen_lines) >= len(self.lines):
-                        raise Exception("There are not enough lines in the source file. Aborting. HINT every line eligible should be at least 2 wide")
-
-
-                    chosen_lines.append(random_line)
-
-                    if len(self.lines[random_line]) < 3:
-                        found = False
-                        continue
-
-                    random_pos = randint(1, len(self.lines[random_line]) - 2)
-                    current_line = self.lines[random_line]
-
+                    random_pos = randint(1, len(current_line) - 2)
                     if current_line[random_pos - 1] in self.space_map.keys() or current_line[random_pos + 1] in self.space_map.keys():
                         found = False
                     else:
@@ -190,12 +185,9 @@ class ZeroWidth():
         else:
             lines = self.raw.splitlines()
 
-            # this will delete every zero character contained in space_map so it
-            # might confuse files where zero characters are actually used
+            # this way we prserve any zero-width character inside the text document
             for text in self.text_encoded:
                 lines[text["line"] - 1] = lines[text["line"] - 1].replace(text["text"], "")
-                """for s in self.space_map:
-                    lines[text["line"] - 1] = lines[text["line"] - 1].replace(s, "")"""
 
         self.output_buffer = "".join(line + '\n' for line in lines)
 
