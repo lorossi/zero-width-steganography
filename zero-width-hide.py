@@ -1,3 +1,4 @@
+import os
 import logging
 import argparse
 import zerowidth
@@ -13,11 +14,12 @@ def main():
     parser.add_argument('-d', '--destination', help='destination file - leave empty to output to console', required=False, type=str)
     parser.add_argument('-E', '--encode', help='encode source', required=False, action="store_true")
     parser.add_argument('-D', '--decode', help='decode source', required=False, action="store_true")
-    parser.add_argument('-t', '--text', help='clear text to be encoded string (or filepath - TODO)', required=False, type=str)
+    parser.add_argument('-T', '--text', help='clear text to be encoded string', required=False, type=str)
+    parser.add_argument('-t', '--textpath', help='path of a clear text file to be encoded string', required=False, type=str)
     parser.add_argument('-C', '--clean', help='clean source file from hidden text', required=False, action="store_true")
-    parser.add_argument('-p', '--position', help='set position of encoded text in destination file. Can be: a list of line numbers, "random", "top", "bottom", "lines". Defaults to "top"', required=False)
+    parser.add_argument('-p', '--position', help='set position of encoded text in destination file. Can be: a list of line numbers, "random", "top", "bottom", "lines", "nth". Defaults to "top"', required=False)
     parser.add_argument('-l', '--lines', help='set lines of encoded text in destination file if -p parameter is "lines". Defaults to 1', required=False, type=int, nargs="+")
-    parser.add_argument('-o', '--occasions', help='set number of lines of encoded text in destination file if -p parameter is "lines", defaults to 1', required=False, type=int, nargs="+")
+    parser.add_argument('-o', '--occasions', help='set number of lines of encoded text in destination file if -p parameter is "random" or "lines", number of lines to skip if -p is "nth". Defaults to 1', required=False, type=int, nargs="+")
     args = parser.parse_args()
 
     if not(args.decode or args.encode or args.clean):
@@ -29,7 +31,7 @@ def main():
         parser.print_help()
         logging.error("No source file specified")
 
-    if args.encode and not args.text:
+    if args.encode and not (args.text or args.textpath):
         parser.print_help()
         logging.error("No text source")
 
@@ -53,6 +55,7 @@ def main():
         try:
             z.searchEncodedText()
             z.cleanFile(args.source)
+            z.writeFile(args.source)
         except Exception as e:
             logging.error(f"Error while cleaning file. Error: {e}")
             print("Couldn't clean file")
@@ -64,11 +67,23 @@ def main():
 
     elif (args.encode):
         try:
-            z.setClearText(args.text)
+            if args.text:
+                cleartext = args.text
+            elif args.textpath:
+                with open(args.textpath, 'r', encoding='utf-8-sig') as f:
+                    cleartext = f.read().splitlines()
+
+        except Exception as e:
+            logging.info(f"No clear text found or text couldn't be encoded. Error {e}")
+            print("No clear text found or text couldn't be encoded")
+            return
+
+        try:
+            z.setClearText(cleartext)
             z.zeroEncode()
         except Exception as e:
-            logging.info(f"No clear text found or text coulnd't be encoded. Error {e}")
-            print("No clear text found or text coulnd't be encoded")
+            logging.info(f"Text couldn't be encoded. Error {e}")
+            print("Text couldn't be encoded")
             return
 
         logging.info("Text encoded")
@@ -76,17 +91,20 @@ def main():
         try:
             if args.source:
                 z.readFile(args.source)
+
             if args.position and args.lines:
-                z.emdedEncoded(args.position, args.lines)
+                z.emdedEncoded(args.position, lines=args.lines)
+            elif args.position and args.occasions:
+                z.emdedEncoded(args.position, occasions=args.occasions[0])
             elif args.position:
                  z.emdedEncoded(args.position, [1])
             else:
                 z.emdedEncoded()
-            z.writeFileEncoded(args.destination)
+            z.writeFile(args.destination)
 
         except Exception as e:
-            logging.info(f"No clear text found or text coulnd't be encoded. Error {e}")
-            print("No clear text found or text coulnd't be encoded")
+            logging.info(f"No clear text found or text couldn't be encoded. Error {e}")
+            print("No clear text found or text couldn't be encoded")
             return
 
         logging.info("Text encoded in output file")
@@ -110,7 +128,7 @@ def main():
 
         if (args.destination):
             try:
-                z.writeFileDecoded(args.destination)
+                z.writeFile(args.destination)
                 logging.info("Output written to file")
                 print(f"Output written to file {args.destination}")
                 return

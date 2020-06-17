@@ -43,7 +43,6 @@ class ZeroWidth():
 
         if len(self.text_encoded) > 0:
             return True
-
         return False
 
     def zeroEncode(self):
@@ -57,7 +56,7 @@ class ZeroWidth():
             new_dict["text"] = "".join(self.character_map[b] for b in self.bits)
             self.text_encoded.append(new_dict)
 
-        all_dict = {"all" : "".join(t["text"] for t in self.text_encoded )}
+        all_dict = {"all" : "".join(t["text"] for t in self.text_encoded)}
         self.text_encoded.append(all_dict)
         return self.text_encoded
 
@@ -84,27 +83,21 @@ class ZeroWidth():
             tab = "\t"
             output = (
                 f"Text found in line {dict['line']}:"
-                f"{tab}{dict['text']}{newl}"
+                f"{tab}{dict['text'].replace(newl, ' ')}{newl}"
             )
             self.decoded_string += output
 
-        self.decoded_string = self.decoded_string.rstrip("\n")
-
+        self.decoded_string = self.decoded_string.rstrip()
+        self.output_buffer = self.decoded_string
         return self.decoded_string
 
     def readFile(self, path):
         with open(path, 'r', encoding='utf-8-sig') as f:
             self.raw = f.read()
 
-    def writeFileDecoded(self, path):
+    def writeFile(self, path):
         with open(path, 'w',  encoding='utf-8-sig') as f:
-            f.write(self.decoded_string)
-
-    def writeFileEncoded(self, path):
-        f = open(path, "w", encoding='utf-8-sig')
-        for line in self.lines:
-            f.write(line + '\n')
-        f.close()
+            f.write(self.output_buffer)
 
     def emdedEncoded(self, position="top", lines=None, occasions=1):
         self.lines = self.raw.splitlines()
@@ -117,16 +110,25 @@ class ZeroWidth():
                 index = linecount % (len(self.text_encoded) - 1)
                 self.lines[p-1] += self.text_encoded[index]["text"]
                 linecount += 1
+
+        elif position == "nth":
+            for i in range(1, len(self.lines) - 1, occasions):
+                index = (i - 1) % (len(self.text_encoded) - 1)
+                self.lines[i-1] += self.text_encoded[index]["text"]
+
         elif position == "top":
             self.lines[0] += self.text_encoded[-1]["all"]
+
         elif position == "bottom":
             self.lines[-1] = self.text_encoded[-1]["all"] + self.lines[-1]
+
         elif position == "lines":
             linecount = 0
             for x in range(0, len(self.lines), occasions):
                 index = linecount % (len(self.text_encoded) - 1)
                 self.lines[x] += self.text_encoded[index]["text"]
                 linecount += 1
+
         elif position == "random":
             for x in range(occasions):
                 found = False
@@ -136,33 +138,37 @@ class ZeroWidth():
                         random_line = 0
                     else:
                         random_line = randint(0, len(self.lines) - 1)
+                        print("generated")
 
-                    if len(self.lines[random_line]) < 2:
+                    if len(self.lines[random_line]) < 3:
+                        found = False
                         continue
 
                     random_pos = randint(1, len(self.lines[random_line]) - 2)
-                    current_line = lines[random_line]
+                    current_line = self.lines[random_line]
 
                     if current_line[random_pos - 1] in self.space_map.keys() or current_line[random_pos + 1] in self.space_map.keys():
                         found = False
                     else:
                         found = True
 
-                self.lines[random_line] = self.lines[random_line][:random_pos] + self.text_encoded[0]["text"] + self.lines[random_line][random_pos:]
+                random_encoded = randint(0, len(self.text_encoded))
+                self.lines[random_line] = self.lines[random_line][:random_pos] + self.text_encoded[random_encoded]["text"] + self.lines[random_line][random_pos:]
+
+        self.output_buffer = "".join(line + '\n' for line in self.lines)
+        return len(self.lines)
 
     def cleanFile(self, path):
-        # run searchEncodedText beforehand
         if self.text_encoded == []:
+            self.output_buffer =  self.raw
             return
+
         else:
-            f = open(path, "r", encoding='utf-8-sig')
-            lines = f.read().splitlines()
-            f.close()
+            lines = self.raw.splitlines()
 
             for text in self.text_encoded:
                 lines[text["line"] - 1] = lines[text["line"] - 1].replace(text["text"], "")
 
-        f = open(path, "w", encoding='utf-8-sig')
-        for line in lines:
-            f.write(line + '\n')
-        f.close()
+        self.output_buffer = "".join(line + '\n' for line in lines)
+
+        return len(lines)
