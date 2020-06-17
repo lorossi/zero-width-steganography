@@ -2,17 +2,17 @@
 
 ## CODE
 1. create requirements.txt file
-2. comment code in a decent way
-3. do some testing
-4. find some more descriptive names for the methods
+2. comment code in a decent way *WIP*
+3. ~~do some testing~~ **DONE**
+4. find some more descriptive names for the methods - *i believe they are descriptive enough*
 5. git squash and go public
 6. ~~convert function arguments in \*\*kwargs~~ **DONE**
 
 ## INTERFACE
-1. add colored interface - is it really necessary
+1. add colored interface - *is it really necessary?*
 
 ## DOCS
 1. create some documentation explaining how i did it all
 2. write a decent readme
 3. video recording of how it works
-4. **A more descriptive name?*
+4. **A more descriptive name?**
