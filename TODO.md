@@ -12,3 +12,5 @@
 
 ## DOCS
 1. create some documentation explaining how i did it all
+2. write a decent readme
+3. video recording of how it works
