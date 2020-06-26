@@ -100,12 +100,13 @@ class ZeroWidth():
         return self.clear_text
 
     def zeroDecodeString(self, **kwargs):
+        # creates string from decoded text
         newl = "\n"
         tab = "\t"
         self.decoded_string = ""
 
         if kwargs["verbose"]:
-            # creates string from decoded text
+            # verbose mode: more informations
             newl = "\n"
             tab = "\t"
             self.decoded_string += f"{len(self.clear_text)} instances of hidden text found{newl}"
@@ -116,6 +117,7 @@ class ZeroWidth():
                 )
                 self.decoded_string += output
         else:
+            # non verbose mode: less informations
             for dict in self.clear_text:
                 output = (
                     f"Line {dict['line']}:{tab}"

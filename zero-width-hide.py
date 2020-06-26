@@ -3,8 +3,6 @@ import logging
 import argparse
 import zerowidth
 
-import traceback
-
 def main():
     logging.basicConfig(filename="zero-width-hide.log", level=logging.INFO,
                         format='%(asctime)s %(levelname)s %(message)s',
@@ -28,35 +26,41 @@ def main():
     z = zerowidth.ZeroWidth()
 
     if (args.version):
+        # the user just wants to know the version
         version = z.version()
         print(f"Zero width version: {version}")
         return
 
     if not(args.decode or args.encode or args.clean):
+        # the user didn't specify what he wants to do
         logging.error("No encode/decode/clean option specified or No destination and encode specified")
         print("No encode/decode/clean option specified or No destination and encode specified")
         parser.print_help()
         return
 
     if args.decode and not (args.source or args.sourcetext):
-        logging.error("No source file specified\n")
+        # the user didn't specify a source and is trying to decode
+        logging.error("No source file specified")
         print("No source file specified")
         parser.print_help()
         return
 
     if args.encode and not (args.text or args.textpath):
+        # the user didn't specify a source and is trying to encode
         logging.error("No text source\n")
         print("No text source")
         parser.print_help()
         return
 
     if args.encode and not args.destination:
+        # the user didn't specify a destination and is trying to encode
         logging.error("No destination file specified\n")
         print("No destination file specified")
         parser.print_help()
         return
 
     if args.clean and not args.source:
+        # the user didn't specify what file he wants to clean
         logging.error("No text source\n")
         print("No text source")
         parser.print_help()
@@ -64,11 +68,11 @@ def main():
 
     if (args.source):
         try:
+            # we attempt to read a file source
             z.readFile(args.source)
         except Exception as e:
             logging.error(f"Error while opening source file. Error: {e}")
             print("Couldn't read source file. Look at log for more informations")
-            #traceback.print_exc()
             return
         logging.info("Source file loaded")
         if (args.verbose):
@@ -76,33 +80,37 @@ def main():
 
     elif (args.sourcetext):
         try:
+            # we attempt to read console source
             z.readSource(args.sourcetext)
         except Exception as e:
             logging.error(f"Error while reading source text. Error: {e}")
             print("Couldn't read source text. Look at log for more informations")
-            #traceback.print_exc()
             return
         logging.info("Source text valid")
-        print("Source text loaded")
+        if (args.verbose):
+            print("Source text loaded")
 
     if (args.clean):
         try:
+            # we attempt to look for encoded text
             z.searchEncodedText()
+            # we attempt to clean it
             z.cleanSource(args.source)
         except Exception as e:
             logging.error(f"Error while cleaning file. Error: {e}")
             print("Couldn't clean file. Look at log for more informations")
-            #traceback.print_exc()
             return
 
         try:
             if args.destination:
+                # we write the cleaned file into destination
                 z.writeFile(args.destination)
-                logging.info("Destination file cleaned")
+                logging.info("Source file cleaned in destination")
                 if (args.verbose):
-                    print("Destination file cleaned")
+                    print("Source file cleaned in destination")
                 return
             else:
+                # we overwrite the current file in order to clear it
                 z.writeFile(args.source)
                 logging.info("Source file cleaned")
                 if (args.verbose):
@@ -111,26 +119,28 @@ def main():
         except Exception as e:
                 logging.error(f"Error while cleaning file. Error: {e}")
                 print("Couldn't clean file. Look at log for more informations")
-                #traceback.print_exc()
                 return
 
 
     elif (args.encode):
         try:
             if args.text:
+                # source from console
                 cleartext = args.text
             elif args.textpath:
+                # source from file
                 with open(args.textpath, 'r', encoding='utf-8-sig') as f:
                     cleartext = f.read().splitlines()
 
         except Exception as e:
             logging.info(f"No clear text found or text couldn't be encoded. Error {e}")
             print("No clear text found or text couldn't be encoded. Look at log for more informations")
-            #traceback.print_exc()
             return
 
         try:
+            # we set clear text
             z.setClearText(cleartext)
+            # we encode in zero width
             z.zeroEncode()
         except Exception as e:
             logging.info(f"Text couldn't be encoded. Error {e}")
@@ -138,18 +148,23 @@ def main():
             return
 
         logging.info("Text encoded")
+        if (args.verbose):
+            print("Text encoded")
 
         try:
             if isinstance(args.lines, int):
+                # the user has specified only one line
+                # we want to wrap it in a list
                 args.lines = [args.lines]
 
+            # we embed the text in the source code
             z.embedEncoded(position=args.position, lines=args.lines, occasions=args.occasions)
+            # we write the cleaned text into destination
             z.writeFile(args.destination)
 
         except Exception as e:
             logging.info(f"No clear text found or text couldn't be encoded. Error {e}")
             print("No clear text found or text couldn't be encoded. Look at log for more informations")
-            #traceback.print_exc()
             return
 
         logging.info("Text encoded in output file")
@@ -160,6 +175,9 @@ def main():
 
     elif (args.decode):
         logging.info("Attempting to decode")
+        if (args.verbose):
+            print("Attempting to decode"")
+        # attempting to decode
         result = z.searchEncodedText()
 
         if not result:
@@ -168,12 +186,16 @@ def main():
                 print("No encoded text has been found in this file.")
             return
 
+        # number of encoded strings found
         decoded = z.zeroDecode()
         logging.info(f"{len(decoded)} instances of text found")
+        # we attempt to decode the encoded text
         decoded_string = z.zeroDecodeString(verbose=args.verbose)
 
         if (args.destination):
+            # if the user has specified a destination file
             try:
+                # we write it down
                 z.writeFile(args.destination)
                 logging.info("Output written to file")
                 if (args.verbose):
@@ -182,9 +204,9 @@ def main():
             except Exception as e:
                 logging.error(f"Error while writing to file. Error: {e}")
                 print(f"Couldn't write to file {args.destination}. Look at log for more informations")
-                #traceback.print_exc()
                 return
         else:
+            # otherwise, we print into console
             logging.info("String decoded")
             print(decoded_string)
             return
