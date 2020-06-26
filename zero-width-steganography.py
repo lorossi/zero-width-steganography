@@ -1,7 +1,7 @@
 import os
 import logging
 import argparse
-import zerowidth
+import zerowidthspy
 
 def main():
     logging.basicConfig(filename="zero-width-hide.log", level=logging.INFO,
@@ -23,7 +23,7 @@ def main():
     parser.add_argument('-l', '--lines', help='set lines of encoded text in destination file if -p parameter is "lines". Defaults to first.', required=False, type=int, nargs="+", default=1)
     parser.add_argument('-o', '--occasions', help='set number of lines of encoded text in destination file if -p parameter is "random", number of lines to skip if -p is "nth". Defaults to 1', required=False, type=int, nargs="+", default=[1])
     args = parser.parse_args()
-    z = zerowidth.ZeroWidth()
+    z = zerowidthspy.ZeroWidth()
 
     if (args.version):
         # the user just wants to know the version
@@ -167,16 +167,16 @@ def main():
             print("No clear text found or text couldn't be encoded. Look at log for more informations")
             return
 
-        logging.info("Text encoded in output file")
+        logging.info("Text written in output file")
         if (args.verbose):
-            print("Text encoded in output file")
+            print("Text written in output file")
 
         return
 
     elif (args.decode):
         logging.info("Attempting to decode")
         if (args.verbose):
-            print("Attempting to decode"")
+            print("Attempting to decode")
         # attempting to decode
         result = z.searchEncodedText()
 
