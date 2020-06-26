@@ -66,4 +66,6 @@ This script logs everything inside a log file named "zero-width-steganography.lo
 
 
 # Documentation
+This code doesn't need any particular module. It will work with the pre installed packages.
+
 **TODO**
