@@ -105,6 +105,7 @@ class ZeroWidth():
         # creates string from decoded text
         newl = "\n"
         tab = "\t"
+        spacing = " --- "
         self.decoded_string = ""
 
         if kwargs["verbose"]:
@@ -122,8 +123,8 @@ class ZeroWidth():
             # non verbose mode: less informations
             for dict in self.clear_text:
                 output = (
-                    f"Line {dict['line']}:{tab}"
-                    f"{tab}{dict['text'].replace(newl, ' ')}{newl}"
+                    f"{dict['line']}{spacing}"
+                    f"{dict['text'].replace(newl, ' ')}{newl}"
                 )
                 self.decoded_string += output
 

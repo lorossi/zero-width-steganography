@@ -156,7 +156,7 @@ def main():
                 # the user has specified only one line
                 # we want to wrap it in a list
                 args.lines = [args.lines]
-
+                
             # we embed the text in the source code
             z.embedEncoded(position=args.position, lines=args.lines, occasions=args.occasions)
             # we write the cleaned text into destination
