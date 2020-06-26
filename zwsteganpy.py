@@ -1,3 +1,5 @@
+# zwsteganpy -> Zero Width Steganography Python
+
 from random import randint, choice
 
 class ZeroWidth():
