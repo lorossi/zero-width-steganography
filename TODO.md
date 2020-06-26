@@ -5,7 +5,7 @@
 2. ~~comment code in a decent way~~ **DONE**
 3. ~~do some testing~~ **DONE**
 4. find some more descriptive names for the methods *STILL THINKING IF I SHOULD CHANGE NAME*
-5. git squash and go public
+5. git squash and go public *IT'S NOT READY YET!*
 6. ~~convert function arguments in \*\*kwargs~~ **DONE**
 
 ## INTERFACE
