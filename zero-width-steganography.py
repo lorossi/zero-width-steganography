@@ -4,7 +4,7 @@ import argparse
 import zerowidthspy
 
 def main():
-    logging.basicConfig(filename="zero-width-hide.log", level=logging.INFO,
+    logging.basicConfig(filename="zero-width-steganography.log", level=logging.INFO,
                         format='%(asctime)s %(levelname)s %(message)s',
                         filemode="w")
 
