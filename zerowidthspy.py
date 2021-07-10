@@ -17,27 +17,33 @@ class ZeroWidth():
 
         # reverses the "character_map" dict so we can map spaces to bits
         self.space_map = {v: k for k, v in self.character_map.items()}
-
-    def version(self):
-        # return the version of the library
-        return self.version_string
+        # get the special hidden characters
+        self.hidden_characters = list(self.space_map.keys())
 
     def setClearText(self, clear_text):
         # THESE ARE THE STRINGS THAT WILL BE HIDDEN
         # clear_text can be both string or list. We want to differentiate
         if isinstance(clear_text, str):
+            # passed text is a string
             new_dict = {"text": clear_text}
             self.clear_text.append(new_dict)
-        else:
+        elif isinstance(clear_text, list):
+            # passed text is a list
             for t in clear_text:
                 new_dict = {"text": t}
                 self.clear_text.append(new_dict)
+        else:
+            # try to stringify it
+            new_dict = {"text": str(clear_text)}
+            self.clear_text.append(new_dict)
 
         # clear_text is now list of dicts, each of one has a "text" field
         #   containing the clear text
 
     def setEncodedText(self, text_encoded):
+        # THIS IS THE STRING THAT WILL BE DECODED
         if not text_encoded.endswith("\n"):
+            # add newline character
             text_encoded += "\n"
         self.text_encoded = [{"text": text_encoded, "line": 1}]
         # text_encoded is now a list of dicts
@@ -53,7 +59,8 @@ class ZeroWidth():
             new_dict = {}
             new_dict["text"] = ""
             for c in line:
-                if c in list(self.space_map.keys()):
+                # check if the character is in the
+                if c in self.hidden_characters:
                     new_dict["text"] += c
 
             # check if we found a multiple of 9 "bits" (a char)
@@ -108,23 +115,19 @@ class ZeroWidth():
 
     def zeroDecodeString(self, **kwargs):
         # creates string from decoded text
-        newl = "\n"
-        tab = "\t"
         spacing = " --- "
         self.decoded_string = ""
 
         if kwargs["verbose"]:
             # verbose mode: more informations
-            newl = "\n"
-            tab = "\t"
             self.decoded_string += (
                 f"{len(self.clear_text)} instances "
-                f"of hidden text found{newl}"
+                f"of hidden text found \n"
             )
             for dict in self.clear_text:
                 output = (
-                    f"Text found in line {dict['line']}:{newl}"
-                    f"{tab}{dict['text'].replace(newl, ' ')}{newl}"
+                    f"Text found in line {dict['line']}:\n"
+                    f"\t{dict['text'].replace('\n', ' ')}\n"
                 )
                 self.decoded_string += output
         else:
@@ -132,7 +135,7 @@ class ZeroWidth():
             for dict in self.clear_text:
                 output = (
                     f"{dict['line']}{spacing}"
-                    f"{dict['text'].replace(newl, ' ')}{newl}"
+                    f"{dict['text'].replace('\n', ' ')} \n"
                 )
                 self.decoded_string += output
 
@@ -167,10 +170,9 @@ class ZeroWidth():
         # hides in every line (or in a list of lines)
         if kwargs["position"] == "lines":
             linecount = 0
-            for p in kwargs["lines"]:
+            for linecount, p in enumerate(kwargs["lines"]):
                 index = linecount % (len(self.text_encoded) - 1)
                 self.lines[p-1] += self.text_encoded[index]["text"]
-                linecount += 1
 
         # hides text every nth lines
         elif kwargs["position"] == "nth":
@@ -217,7 +219,7 @@ class ZeroWidth():
                 )
 
             current_encoded = 0
-            for x in range(kwargs["occasions"][0]):
+            for _ in range(kwargs["occasions"][0]):
 
                 # pick a random line
                 line = choice(available_lines)
@@ -258,7 +260,7 @@ class ZeroWidth():
         else:
             lines = self.raw.splitlines()
 
-            # this way we prserve any zero-width character
+            # this way we preserve any zero-width character
             # inside the text document
             for text in self.text_encoded:
                 lines[text["line"] - 1] = lines[text["line"] -
@@ -267,3 +269,9 @@ class ZeroWidth():
         self.output_buffer = "".join(line + '\n' for line in lines)
 
         return len(lines)
+
+    # property getter
+    @property
+    def version(self):
+        # return the version of the library
+        return self.version_string
