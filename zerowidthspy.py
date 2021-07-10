@@ -2,6 +2,7 @@
 
 from random import randint, choice
 
+
 class ZeroWidth():
     def __init__(self):
         self.version_string = "1.0"
@@ -10,8 +11,8 @@ class ZeroWidth():
         self.raw = ""
         # maps bits to spaces
         self.character_map = {
-            "0" : u'\u200B', # ZERO WIDTH SPACE
-            "1" : u'\uFEFF' # ZERO WIDTH NO-BREAK SPACE
+            "0": u'\u200B',  # ZERO WIDTH SPACE
+            "1": u'\uFEFF'  # ZERO WIDTH NO-BREAK SPACE
         }
 
         # reverses the "character_map" dict so we can map spaces to bits
@@ -25,11 +26,11 @@ class ZeroWidth():
         # THESE ARE THE STRINGS THAT WILL BE HIDDEN
         # clear_text can be both string or list. We want to differentiate
         if isinstance(clear_text, str):
-            new_dict = {"text" : clear_text}
+            new_dict = {"text": clear_text}
             self.clear_text.append(new_dict)
         else:
             for t in clear_text:
-                new_dict = {"text" : t}
+                new_dict = {"text": t}
                 self.clear_text.append(new_dict)
 
         # clear_text is now list of dicts, each of one has a "text" field
@@ -38,9 +39,10 @@ class ZeroWidth():
     def setEncodedText(self, text_encoded):
         if not text_encoded.endswith("\n"):
             text_encoded += "\n"
-        self.text_encoded = [{"text" : text_encoded, "line" : 1}]
+        self.text_encoded = [{"text": text_encoded, "line": 1}]
         # text_encoded is now a list of dicts
-        # should probably make multiple dicts? don't really know why it's a single dict
+        # should probably make multiple dicts?
+        #   don't really know why it's a single dict
 
     def searchEncodedText(self):
         # search for encoded text in source
@@ -70,17 +72,20 @@ class ZeroWidth():
 
         for text in self.clear_text:
             # we read the chars and convert it to bits
-            self.raw_bits = "".join(format(ord(c), '09b') for c in text["text"])
+            self.raw_bits = "".join(format(ord(c), '09b')
+                                    for c in text["text"])
             self.bits = ""
             for r in self.raw_bits:
-                if ord(r) != 65279: # BOM mark
+                if ord(r) != 65279:  # BOM mark
                     self.bits += r
             new_dict = {}
-            new_dict["text"] = "".join(self.character_map[b] for b in self.bits)
+            new_dict["text"] = "".join(self.character_map[b]
+                                       for b in self.bits)
             self.text_encoded.append(new_dict)
 
-        # the last dict of the list contains all encoded text in a single string
-        all_dict = {"all" : "".join(t["text"] for t in self.text_encoded)}
+        # the last dict of the list contains all encoded text
+        # in a single string
+        all_dict = {"all": "".join(t["text"] for t in self.text_encoded)}
         self.text_encoded.append(all_dict)
         return self.text_encoded
 
@@ -112,7 +117,10 @@ class ZeroWidth():
             # verbose mode: more informations
             newl = "\n"
             tab = "\t"
-            self.decoded_string += f"{len(self.clear_text)} instances of hidden text found{newl}"
+            self.decoded_string += (
+                f"{len(self.clear_text)} instances "
+                f"of hidden text found{newl}"
+            )
             for dict in self.clear_text:
                 output = (
                     f"Text found in line {dict['line']}:{newl}"
@@ -182,13 +190,17 @@ class ZeroWidth():
         # hides at random positions inside document
         elif kwargs["position"] == "random":
 
-            if kwargs["occasions"][0] >  len(self.lines):
+            if kwargs["occasions"][0] > len(self.lines):
                 # there are more occasions than lines
-                raise Exception("There can't be more occasions than lines. Aborting")
+                raise Exception(
+                    "There can't be more occasions than lines. Aborting")
 
             if kwargs["occasions"][0] < len(self.text_encoded) - 2:
-                # there are more lines of text to be encoded than lines in document
-                raise Exception("There can't be less occasions than lines of text to be encoded. Aborting")
+                # there are more lines of text to be encoded
+                # than lines in document
+                raise Exception(
+                    "There can't be less occasions than lines of "
+                    "text to be encoded. Aborting")
 
             # list of free lines (as opposing to brute-forcing every line)
             available_lines = []
@@ -198,30 +210,40 @@ class ZeroWidth():
 
             if len(available_lines) < kwargs["occasions"][0]:
                 # the lines are too short to hide text
-                raise Exception("There are not enough available lines in the source file. Every line available should be at least 2 characters wide. Aborting.")
+                raise Exception(
+                    "There are not enough available lines in the source file. "
+                    "Every line available should be at least "
+                    "2 characters wide. Aborting."
+                )
 
             current_encoded = 0
             for x in range(kwargs["occasions"][0]):
 
                 # pick a random line
-                random_line = choice(available_lines)
-                available_lines.remove(random_line)
-                current_line = self.lines[random_line]
+                line = choice(available_lines)
+                available_lines.remove(line)
+                current_line = self.lines[line]
 
-                # try to fit the text inside said line (not as first or last character)
+                # try to fit the text inside said line
+                #   (not as first or last character)
                 found = False
                 while not found:
-                    random_pos = randint(1, len(current_line) - 2)
-                    if current_line[random_pos - 1] in self.space_map.keys() or current_line[random_pos + 1] in self.space_map.keys():
-                        # neighbouring charactes must not be already hidden
+                    pos = randint(1, len(current_line) - 2)
+                    prev = current_line[pos - 1]
+                    next = current_line[pos + 1]
+                    if [prev, next] in self.space_map.keys():
+                        # neighbouring characters must not be already hidden
                         found = False
                     else:
                         found = True
 
                 # insert the encoded text in line
-                self.lines[random_line] = self.lines[random_line][:random_pos] + self.text_encoded[current_encoded]["text"] + self.lines[random_line][random_pos:]
+                self.lines[line] = self.lines[line][:pos] \
+                    + self.text_encoded[current_encoded]["text"] \
+                    + self.lines[line][pos:]
                 # rotate to next text
-                current_encoded = (current_encoded + 1) % (len(self.text_encoded) - 1)
+                current_encoded = (current_encoded +
+                                   1) % (len(self.text_encoded) - 1)
 
         # text is now ready to be written
         self.output_buffer = "".join(line + '\n' for line in self.lines)
@@ -230,15 +252,17 @@ class ZeroWidth():
     def cleanSource(self, path):
         # remove everything from source
         if self.text_encoded == []:
-            self.output_buffer =  self.raw
+            self.output_buffer = self.raw
             return
 
         else:
             lines = self.raw.splitlines()
 
-            # this way we prserve any zero-width character inside the text document
+            # this way we prserve any zero-width character
+            # inside the text document
             for text in self.text_encoded:
-                lines[text["line"] - 1] = lines[text["line"] - 1].replace(text["text"], "")
+                lines[text["line"] - 1] = lines[text["line"] -
+                                                1].replace(text["text"], "")
 
         self.output_buffer = "".join(line + '\n' for line in lines)
 
