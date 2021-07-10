@@ -1,0 +1,6 @@
+/__pycache__
+/src
+/old
+/test
+*.txt
+*.log
