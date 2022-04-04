@@ -81,6 +81,6 @@ The script also has the ability to clean a file containing hidden text. Just pro
 
 ## Documentation
 
-The documentation can be found [here]().
+The documentation can be found [here](https://lorossi.github.io/zero-width-steganography/).
 
 This code doesn't need any particular module. It will work with the pre installed packages.
