@@ -76,7 +76,8 @@ class ZeroWidth:
     def zeroEncode(
         self, source: str, clear: str, position: Position, k: int = 1
     ) -> str:
-        """Encode clear string and hides into the source string in position according to the parameter.
+        """Encode clear string and hides into the source string in position according \
+        to the parameter.
 
         Args:
             source (str): text that will contain the hidden strings
@@ -188,3 +189,12 @@ class ZeroWidth:
             source = f.read()
 
         return self.cleanString(source)
+
+    @property
+    def version(self) -> str:
+        """Return current version.
+
+        Returns:
+            str
+        """
+        return self._version
