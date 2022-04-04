@@ -1,6 +1,4 @@
-/__pycache__
-/src
-/old
-/test
-*.txt
-*.log
+__pycache__
+venv
+.vscode
+.coverage

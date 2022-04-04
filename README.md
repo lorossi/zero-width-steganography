@@ -14,7 +14,7 @@ So this is how I got the inspiration. Neat, isn't it?
 
 ## Looking for the right way
 
-At this point I had to start tinkering on how I could concretize this project.
+At this point I had to start tinkering on how I could realize this project.
 Snooping through Wikipedia, I started looking for characters that could be hidden inside text files without being too noticeable. Instantly, I was very surprising by discovering that Greek question marks (;) are very similar (if not completely unrecognizable!) to regular semicolons (;). I thought that maybe I could find a way to swap them in some clever way to hide text. But honestly, unless you are working with C/C++ code, how often do you use semicolons? (This similarity can be used to prank a programmer. Just replace every semicolon and watch him *-and his compiler-* go crazy)
 
 So at this point, I was lost. There are *1,112,064 different characters* encoded by UTF-8. I mean, it's bound to create some very similar symbols, right? Sadly, after scrolling a while (a very long while) through the list of every character it dawned to me that this couldn't be the right path.
