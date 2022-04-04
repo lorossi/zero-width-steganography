@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>zerowidth API documentation</title>
+<meta name="description" content="Class handling the Steganography." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>zerowidth</code></h1>
+</header>
+<section id="section-intro">
+<p>Class handling the Steganography.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;Class handling the Steganography.&#34;&#34;&#34;
+
+from random import randint
+from enum import Enum
+
+
+class Position(Enum):
+    &#34;&#34;&#34;
+    Enum class handling the positioning of the hidden text.
+
+        TOP: Before the first line of the text
+        BOTTOM: After the first line of the text
+        RANDOM: In a random line in the text
+        NTHLINES: At the end of every nth-line, as specified by the parameter k
+        RANDOMINLINE: In every line at a random position
+    &#34;&#34;&#34;
+
+    TOP = 0
+    BOTTOM = 1
+    RANDOM = 2
+    NTHLINES = 3
+    RANDOMINLINE = 4
+
+
+class ZeroWidth:
+    &#34;&#34;&#34;Class handling the steganography embedding in files and strings.&#34;&#34;&#34;
+
+    def __init__(self) -&gt; None:
+        &#34;&#34;&#34;Initialize a ZeroWidth instance.&#34;&#34;&#34;
+        self._version = &#34;1.1&#34;
+        # maps bits to spaces
+        self._character_map = {
+            &#34;0&#34;: &#34;\u200B&#34;,  # ZERO WIDTH SPACE
+            &#34;1&#34;: &#34;\uFEFF&#34;,  # ZERO WIDTH NO-BREAK SPACE
+        }
+
+        # reverses the &#34;character_map&#34; dict so we can map spaces to bits
+        self._space_map = {v: k for k, v in self._character_map.items()}
+        # get the special hidden characters
+        self._hidden_characters = set(self._space_map.keys())
+
+    def _spaceEncode(self, clear: str) -&gt; str:
+        &#34;&#34;&#34;Encode the string into spaces.
+
+        Args:
+            clear (str): clear string to encode
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        if len(clear) == 0:
+            return &#34;&#34;
+
+        binary = &#34;&#34;.join(format(ord(c), &#34;08b&#34;) for c in clear)
+        return &#34;&#34;.join(self._character_map[b] for b in binary)
+
+    def _spaceDecode(self, encoded: str) -&gt; str:
+        &#34;&#34;&#34;Decode the string from spaces.
+
+        Args:
+            encoded (str): encoded string
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        if len(encoded) == 0:
+            return &#34;&#34;
+
+        binary = &#34;&#34;.join(self._space_map[e] for e in encoded)
+        decoded = &#34;&#34;.join(
+            chr(int(binary[x : x + 8], 2)) for x in range(0, len(encoded), 8)
+        )
+
+        return decoded
+
+    def zeroEncode(
+        self, source: str, clear: str, position: Position, k: int = 1
+    ) -&gt; str:
+        &#34;&#34;&#34;Encode clear string and hides into the source string in position according \
+        to the parameter.
+
+        Args:
+            source (str): text that will contain the hidden strings
+            clear (str): string to hide in the text
+            position (Position): position of the hidden strings.
+            k (int, optional): specifies:
+                The occurrences of the encoded string in the clear text if Position is Random.
+                The number of clear lines between hidden lines if Position is NTHLINE.
+            Defaults to 1.
+
+        Returns:
+            str: string containing the encoded text
+        &#34;&#34;&#34;
+        encoded = self._spaceEncode(clear)
+
+        match position:
+            case position.TOP:
+                embedded = encoded + source
+            case position.BOTTOM:
+                embedded = source + encoded
+            case position.RANDOM:
+                count = 0
+                while count &lt; k:
+                    k = randint(0, len(source) - 1)
+                    if source[k] in self._hidden_characters:
+                        continue
+                    embedded = source[:k] + encoded + source[k:]
+                    count += 1
+            case position.NTHLINES:
+                lines = source.split(&#34;\n&#34;)
+                for x in range(0, len(lines), k):
+                    lines[x] += encoded
+                embedded = &#34;\n&#34;.join(lines)
+            case position.RANDOMINLINE:
+                lines = source.split(&#34;\n&#34;)
+                for x in range(0, len(lines), k):
+                    k = randint(0, len(lines[x]) - 1)
+                    lines[x] = lines[x][:k] + encoded + lines[x][k:]
+                embedded = &#34;\n&#34;.join(lines)
+
+        return embedded
+
+    def zeroDecode(self, source: str) -&gt; str:
+        &#34;&#34;&#34;Decode an hidden string.
+
+        Args:
+            source (str): text containing hidden strings
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        encoded = &#34;&#34;.join(s for s in source if s in self._hidden_characters)
+        return self._spaceDecode(encoded)
+
+    def zeroEncodeFile(
+        self, source_path: str, clear: str, position: Position, k: int = 1
+    ) -&gt; None:
+        &#34;&#34;&#34;Encode string using a file for source.
+
+        Args:
+            source_path (str): path of source file
+            clear (str): string to hide in the text
+            position (Position): position of the hidden strings.
+            k (int, optional): specifies:
+                The occurrences of the encoded string in the clear text if Position is Random.
+                The number of clear lines between hidden lines if Position is NTHLINE.
+            Defaults to 1.
+        &#34;&#34;&#34;
+        with open(source_path, &#34;r&#34;) as f:
+            source = f.read()
+
+        return self.zeroEncode(source=source, clear=clear, position=position, k=k)
+
+    def zeroDecodeFile(self, source_path: str) -&gt; str:
+        &#34;&#34;&#34;Decode an hidden string in a file.
+
+        Args:
+            source_path (str): path of the file containing the hidden string
+
+        Returns:
+            str: decoded string
+        &#34;&#34;&#34;
+        with open(source_path, &#34;r&#34;) as f:
+            source = f.read()
+
+        return self.zeroDecode(source)
+
+    def cleanString(self, source: str) -&gt; str:
+        &#34;&#34;&#34;Clean a string from hidden characters.
+
+        Args:
+            source (str): string containing hidden characters
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        return &#34;&#34;.join(s for s in source if s not in self._hidden_characters)
+
+    def cleanFile(self, source_path: str) -&gt; str:
+        &#34;&#34;&#34;Clean a string from hidden characters, using a file as source.
+
+        Args:
+            source_path (str): path of the file
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        with open(source_path, &#34;r&#34;) as f:
+            source = f.read()
+
+        return self.cleanString(source)
+
+    @property
+    def version(self) -&gt; str:
+        &#34;&#34;&#34;Return current version.
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        return self._version</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="zerowidth.Position"><code class="flex name class">
+<span>class <span class="ident">Position</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enum class handling the positioning of the hidden text.</p>
+<pre><code>TOP: Before the first line of the text
+BOTTOM: After the first line of the text
+RANDOM: In a random line in the text
+NTHLINES: At the end of every nth-line, as specified by the parameter k
+RANDOMINLINE: In every line at a random position
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Position(Enum):
+    &#34;&#34;&#34;
+    Enum class handling the positioning of the hidden text.
+
+        TOP: Before the first line of the text
+        BOTTOM: After the first line of the text
+        RANDOM: In a random line in the text
+        NTHLINES: At the end of every nth-line, as specified by the parameter k
+        RANDOMINLINE: In every line at a random position
+    &#34;&#34;&#34;
+
+    TOP = 0
+    BOTTOM = 1
+    RANDOM = 2
+    NTHLINES = 3
+    RANDOMINLINE = 4</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="zerowidth.Position.BOTTOM"><code class="name">var <span class="ident">BOTTOM</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="zerowidth.Position.NTHLINES"><code class="name">var <span class="ident">NTHLINES</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="zerowidth.Position.RANDOM"><code class="name">var <span class="ident">RANDOM</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="zerowidth.Position.RANDOMINLINE"><code class="name">var <span class="ident">RANDOMINLINE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="zerowidth.Position.TOP"><code class="name">var <span class="ident">TOP</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="zerowidth.ZeroWidth"><code class="flex name class">
+<span>class <span class="ident">ZeroWidth</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Class handling the steganography embedding in files and strings.</p>
+<p>Initialize a ZeroWidth instance.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ZeroWidth:
+    &#34;&#34;&#34;Class handling the steganography embedding in files and strings.&#34;&#34;&#34;
+
+    def __init__(self) -&gt; None:
+        &#34;&#34;&#34;Initialize a ZeroWidth instance.&#34;&#34;&#34;
+        self._version = &#34;1.1&#34;
+        # maps bits to spaces
+        self._character_map = {
+            &#34;0&#34;: &#34;\u200B&#34;,  # ZERO WIDTH SPACE
+            &#34;1&#34;: &#34;\uFEFF&#34;,  # ZERO WIDTH NO-BREAK SPACE
+        }
+
+        # reverses the &#34;character_map&#34; dict so we can map spaces to bits
+        self._space_map = {v: k for k, v in self._character_map.items()}
+        # get the special hidden characters
+        self._hidden_characters = set(self._space_map.keys())
+
+    def _spaceEncode(self, clear: str) -&gt; str:
+        &#34;&#34;&#34;Encode the string into spaces.
+
+        Args:
+            clear (str): clear string to encode
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        if len(clear) == 0:
+            return &#34;&#34;
+
+        binary = &#34;&#34;.join(format(ord(c), &#34;08b&#34;) for c in clear)
+        return &#34;&#34;.join(self._character_map[b] for b in binary)
+
+    def _spaceDecode(self, encoded: str) -&gt; str:
+        &#34;&#34;&#34;Decode the string from spaces.
+
+        Args:
+            encoded (str): encoded string
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        if len(encoded) == 0:
+            return &#34;&#34;
+
+        binary = &#34;&#34;.join(self._space_map[e] for e in encoded)
+        decoded = &#34;&#34;.join(
+            chr(int(binary[x : x + 8], 2)) for x in range(0, len(encoded), 8)
+        )
+
+        return decoded
+
+    def zeroEncode(
+        self, source: str, clear: str, position: Position, k: int = 1
+    ) -&gt; str:
+        &#34;&#34;&#34;Encode clear string and hides into the source string in position according \
+        to the parameter.
+
+        Args:
+            source (str): text that will contain the hidden strings
+            clear (str): string to hide in the text
+            position (Position): position of the hidden strings.
+            k (int, optional): specifies:
+                The occurrences of the encoded string in the clear text if Position is Random.
+                The number of clear lines between hidden lines if Position is NTHLINE.
+            Defaults to 1.
+
+        Returns:
+            str: string containing the encoded text
+        &#34;&#34;&#34;
+        encoded = self._spaceEncode(clear)
+
+        match position:
+            case position.TOP:
+                embedded = encoded + source
+            case position.BOTTOM:
+                embedded = source + encoded
+            case position.RANDOM:
+                count = 0
+                while count &lt; k:
+                    k = randint(0, len(source) - 1)
+                    if source[k] in self._hidden_characters:
+                        continue
+                    embedded = source[:k] + encoded + source[k:]
+                    count += 1
+            case position.NTHLINES:
+                lines = source.split(&#34;\n&#34;)
+                for x in range(0, len(lines), k):
+                    lines[x] += encoded
+                embedded = &#34;\n&#34;.join(lines)
+            case position.RANDOMINLINE:
+                lines = source.split(&#34;\n&#34;)
+                for x in range(0, len(lines), k):
+                    k = randint(0, len(lines[x]) - 1)
+                    lines[x] = lines[x][:k] + encoded + lines[x][k:]
+                embedded = &#34;\n&#34;.join(lines)
+
+        return embedded
+
+    def zeroDecode(self, source: str) -&gt; str:
+        &#34;&#34;&#34;Decode an hidden string.
+
+        Args:
+            source (str): text containing hidden strings
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        encoded = &#34;&#34;.join(s for s in source if s in self._hidden_characters)
+        return self._spaceDecode(encoded)
+
+    def zeroEncodeFile(
+        self, source_path: str, clear: str, position: Position, k: int = 1
+    ) -&gt; None:
+        &#34;&#34;&#34;Encode string using a file for source.
+
+        Args:
+            source_path (str): path of source file
+            clear (str): string to hide in the text
+            position (Position): position of the hidden strings.
+            k (int, optional): specifies:
+                The occurrences of the encoded string in the clear text if Position is Random.
+                The number of clear lines between hidden lines if Position is NTHLINE.
+            Defaults to 1.
+        &#34;&#34;&#34;
+        with open(source_path, &#34;r&#34;) as f:
+            source = f.read()
+
+        return self.zeroEncode(source=source, clear=clear, position=position, k=k)
+
+    def zeroDecodeFile(self, source_path: str) -&gt; str:
+        &#34;&#34;&#34;Decode an hidden string in a file.
+
+        Args:
+            source_path (str): path of the file containing the hidden string
+
+        Returns:
+            str: decoded string
+        &#34;&#34;&#34;
+        with open(source_path, &#34;r&#34;) as f:
+            source = f.read()
+
+        return self.zeroDecode(source)
+
+    def cleanString(self, source: str) -&gt; str:
+        &#34;&#34;&#34;Clean a string from hidden characters.
+
+        Args:
+            source (str): string containing hidden characters
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        return &#34;&#34;.join(s for s in source if s not in self._hidden_characters)
+
+    def cleanFile(self, source_path: str) -&gt; str:
+        &#34;&#34;&#34;Clean a string from hidden characters, using a file as source.
+
+        Args:
+            source_path (str): path of the file
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        with open(source_path, &#34;r&#34;) as f:
+            source = f.read()
+
+        return self.cleanString(source)
+
+    @property
+    def version(self) -&gt; str:
+        &#34;&#34;&#34;Return current version.
+
+        Returns:
+            str
+        &#34;&#34;&#34;
+        return self._version</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="zerowidth.ZeroWidth.version"><code class="name">var <span class="ident">version</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Return current version.</p>
+<h2 id="returns">Returns</h2>
+<p>str</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def version(self) -&gt; str:
+    &#34;&#34;&#34;Return current version.
+
+    Returns:
+        str
+    &#34;&#34;&#34;
+    return self._version</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="zerowidth.ZeroWidth.cleanFile"><code class="name flex">
+<span>def <span class="ident">cleanFile</span></span>(<span>self, source_path: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Clean a string from hidden characters, using a file as source.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>source_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>path of the file</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>str</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cleanFile(self, source_path: str) -&gt; str:
+    &#34;&#34;&#34;Clean a string from hidden characters, using a file as source.
+
+    Args:
+        source_path (str): path of the file
+
+    Returns:
+        str
+    &#34;&#34;&#34;
+    with open(source_path, &#34;r&#34;) as f:
+        source = f.read()
+
+    return self.cleanString(source)</code></pre>
+</details>
+</dd>
+<dt id="zerowidth.ZeroWidth.cleanString"><code class="name flex">
+<span>def <span class="ident">cleanString</span></span>(<span>self, source: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Clean a string from hidden characters.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>source</code></strong> :&ensp;<code>str</code></dt>
+<dd>string containing hidden characters</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>str</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cleanString(self, source: str) -&gt; str:
+    &#34;&#34;&#34;Clean a string from hidden characters.
+
+    Args:
+        source (str): string containing hidden characters
+
+    Returns:
+        str
+    &#34;&#34;&#34;
+    return &#34;&#34;.join(s for s in source if s not in self._hidden_characters)</code></pre>
+</details>
+</dd>
+<dt id="zerowidth.ZeroWidth.zeroDecode"><code class="name flex">
+<span>def <span class="ident">zeroDecode</span></span>(<span>self, source: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Decode an hidden string.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>source</code></strong> :&ensp;<code>str</code></dt>
+<dd>text containing hidden strings</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>str</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def zeroDecode(self, source: str) -&gt; str:
+    &#34;&#34;&#34;Decode an hidden string.
+
+    Args:
+        source (str): text containing hidden strings
+
+    Returns:
+        str
+    &#34;&#34;&#34;
+    encoded = &#34;&#34;.join(s for s in source if s in self._hidden_characters)
+    return self._spaceDecode(encoded)</code></pre>
+</details>
+</dd>
+<dt id="zerowidth.ZeroWidth.zeroDecodeFile"><code class="name flex">
+<span>def <span class="ident">zeroDecodeFile</span></span>(<span>self, source_path: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Decode an hidden string in a file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>source_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>path of the file containing the hidden string</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>decoded string</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def zeroDecodeFile(self, source_path: str) -&gt; str:
+    &#34;&#34;&#34;Decode an hidden string in a file.
+
+    Args:
+        source_path (str): path of the file containing the hidden string
+
+    Returns:
+        str: decoded string
+    &#34;&#34;&#34;
+    with open(source_path, &#34;r&#34;) as f:
+        source = f.read()
+
+    return self.zeroDecode(source)</code></pre>
+</details>
+</dd>
+<dt id="zerowidth.ZeroWidth.zeroEncode"><code class="name flex">
+<span>def <span class="ident">zeroEncode</span></span>(<span>self, source: str, clear: str, position: <a title="zerowidth.Position" href="#zerowidth.Position">Position</a>, k: int = 1) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Encode clear string and hides into the source string in position according
+to the parameter.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>source</code></strong> :&ensp;<code>str</code></dt>
+<dd>text that will contain the hidden strings</dd>
+<dt><strong><code>clear</code></strong> :&ensp;<code>str</code></dt>
+<dd>string to hide in the text</dd>
+<dt><strong><code>position</code></strong> :&ensp;<code><a title="zerowidth.Position" href="#zerowidth.Position">Position</a></code></dt>
+<dd>position of the hidden strings.</dd>
+<dt><strong><code>k</code></strong> :&ensp;<code>int</code>, optional</dt>
+<dd>specifies:
+The occurrences of the encoded string in the clear text if Position is Random.
+The number of clear lines between hidden lines if Position is NTHLINE.</dd>
+</dl>
+<p>Defaults to 1.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>string containing the encoded text</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def zeroEncode(
+    self, source: str, clear: str, position: Position, k: int = 1
+) -&gt; str:
+    &#34;&#34;&#34;Encode clear string and hides into the source string in position according \
+    to the parameter.
+
+    Args:
+        source (str): text that will contain the hidden strings
+        clear (str): string to hide in the text
+        position (Position): position of the hidden strings.
+        k (int, optional): specifies:
+            The occurrences of the encoded string in the clear text if Position is Random.
+            The number of clear lines between hidden lines if Position is NTHLINE.
+        Defaults to 1.
+
+    Returns:
+        str: string containing the encoded text
+    &#34;&#34;&#34;
+    encoded = self._spaceEncode(clear)
+
+    match position:
+        case position.TOP:
+            embedded = encoded + source
+        case position.BOTTOM:
+            embedded = source + encoded
+        case position.RANDOM:
+            count = 0
+            while count &lt; k:
+                k = randint(0, len(source) - 1)
+                if source[k] in self._hidden_characters:
+                    continue
+                embedded = source[:k] + encoded + source[k:]
+                count += 1
+        case position.NTHLINES:
+            lines = source.split(&#34;\n&#34;)
+            for x in range(0, len(lines), k):
+                lines[x] += encoded
+            embedded = &#34;\n&#34;.join(lines)
+        case position.RANDOMINLINE:
+            lines = source.split(&#34;\n&#34;)
+            for x in range(0, len(lines), k):
+                k = randint(0, len(lines[x]) - 1)
+                lines[x] = lines[x][:k] + encoded + lines[x][k:]
+            embedded = &#34;\n&#34;.join(lines)
+
+    return embedded</code></pre>
+</details>
+</dd>
+<dt id="zerowidth.ZeroWidth.zeroEncodeFile"><code class="name flex">
+<span>def <span class="ident">zeroEncodeFile</span></span>(<span>self, source_path: str, clear: str, position: <a title="zerowidth.Position" href="#zerowidth.Position">Position</a>, k: int = 1) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Encode string using a file for source.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>source_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>path of source file</dd>
+<dt><strong><code>clear</code></strong> :&ensp;<code>str</code></dt>
+<dd>string to hide in the text</dd>
+<dt><strong><code>position</code></strong> :&ensp;<code><a title="zerowidth.Position" href="#zerowidth.Position">Position</a></code></dt>
+<dd>position of the hidden strings.</dd>
+<dt><strong><code>k</code></strong> :&ensp;<code>int</code>, optional</dt>
+<dd>specifies:
+The occurrences of the encoded string in the clear text if Position is Random.
+The number of clear lines between hidden lines if Position is NTHLINE.</dd>
+</dl>
+<p>Defaults to 1.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def zeroEncodeFile(
+    self, source_path: str, clear: str, position: Position, k: int = 1
+) -&gt; None:
+    &#34;&#34;&#34;Encode string using a file for source.
+
+    Args:
+        source_path (str): path of source file
+        clear (str): string to hide in the text
+        position (Position): position of the hidden strings.
+        k (int, optional): specifies:
+            The occurrences of the encoded string in the clear text if Position is Random.
+            The number of clear lines between hidden lines if Position is NTHLINE.
+        Defaults to 1.
+    &#34;&#34;&#34;
+    with open(source_path, &#34;r&#34;) as f:
+        source = f.read()
+
+    return self.zeroEncode(source=source, clear=clear, position=position, k=k)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="zerowidth.Position" href="#zerowidth.Position">Position</a></code></h4>
+<ul class="">
+<li><code><a title="zerowidth.Position.BOTTOM" href="#zerowidth.Position.BOTTOM">BOTTOM</a></code></li>
+<li><code><a title="zerowidth.Position.NTHLINES" href="#zerowidth.Position.NTHLINES">NTHLINES</a></code></li>
+<li><code><a title="zerowidth.Position.RANDOM" href="#zerowidth.Position.RANDOM">RANDOM</a></code></li>
+<li><code><a title="zerowidth.Position.RANDOMINLINE" href="#zerowidth.Position.RANDOMINLINE">RANDOMINLINE</a></code></li>
+<li><code><a title="zerowidth.Position.TOP" href="#zerowidth.Position.TOP">TOP</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="zerowidth.ZeroWidth" href="#zerowidth.ZeroWidth">ZeroWidth</a></code></h4>
+<ul class="two-column">
+<li><code><a title="zerowidth.ZeroWidth.cleanFile" href="#zerowidth.ZeroWidth.cleanFile">cleanFile</a></code></li>
+<li><code><a title="zerowidth.ZeroWidth.cleanString" href="#zerowidth.ZeroWidth.cleanString">cleanString</a></code></li>
+<li><code><a title="zerowidth.ZeroWidth.version" href="#zerowidth.ZeroWidth.version">version</a></code></li>
+<li><code><a title="zerowidth.ZeroWidth.zeroDecode" href="#zerowidth.ZeroWidth.zeroDecode">zeroDecode</a></code></li>
+<li><code><a title="zerowidth.ZeroWidth.zeroDecodeFile" href="#zerowidth.ZeroWidth.zeroDecodeFile">zeroDecodeFile</a></code></li>
+<li><code><a title="zerowidth.ZeroWidth.zeroEncode" href="#zerowidth.ZeroWidth.zeroEncode">zeroEncode</a></code></li>
+<li><code><a title="zerowidth.ZeroWidth.zeroEncodeFile" href="#zerowidth.ZeroWidth.zeroEncodeFile">zeroEncodeFile</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
