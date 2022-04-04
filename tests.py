@@ -1,5 +1,5 @@
 import unittest
-from zerowidthspy import ZeroWidth, Position
+from zerowidth import ZeroWidth, Position
 
 from random import choices, randint
 from string import ascii_letters
@@ -42,12 +42,15 @@ class TestSteganography(unittest.TestCase):
 
                 decoded = z.zeroDecode(source=encoded)
 
-                if position in [Position.LINES, Position.NTH, Position.RANDOMINLINE]:
+                if position in [
+                    Position.NTHLINES,
+                    Position.RANDOMINLINE,
+                ]:
                     self.assertEqual(clear, decoded[: len(clear)])
                 else:
                     self.assertEqual(clear, decoded)
 
-                cleaned = z.clean(encoded)
+                cleaned = z.cleanString(encoded)
                 self.assertEqual(source, cleaned)
 
     def test_file_encode(self):
@@ -62,7 +65,7 @@ class TestSteganography(unittest.TestCase):
                 num = randint(5, 10)
                 clear = random_str(k=32)
                 encoded = z.zeroEncodeFile(
-                    source_path=PATH, clear=clear, position=position, num=num
+                    source_path=PATH, clear=clear, position=position, k=num
                 )
 
                 with open(PATH, "w") as f:
@@ -70,10 +73,15 @@ class TestSteganography(unittest.TestCase):
 
                 decoded = z.zeroDecodeFile(source_path=PATH)
 
-                if position in [Position.LINES, Position.NTH, Position.RANDOMINLINE]:
+                if position in [
+                    Position.NTHLINES,
+                    Position.RANDOMINLINE,
+                ]:
                     self.assertEqual(clear, decoded[: len(clear)])
                 else:
                     self.assertEqual(clear, decoded)
+
+                self.assertEqual(source, z.cleanFile(PATH))
 
         remove(PATH)
 
@@ -83,14 +91,14 @@ class TestSteganography(unittest.TestCase):
         # empty encoded string
         clear = ""
         source = random_multiline(128)
-        encoded = z.zeroEncode(source=source, clear=clear, position=Position.LINES)
+        encoded = z.zeroEncode(source=source, clear=clear, position=Position.NTHLINES)
         decoded = z.zeroDecode(source=encoded)
         self.assertEqual(clear, decoded[: len(clear)])
 
         # single line string
         clear = random_str()
         source = random_multiline(128)
-        encoded = z.zeroEncode(source=source, clear=clear, position=Position.LINES)
+        encoded = z.zeroEncode(source=source, clear=clear, position=Position.NTHLINES)
         decoded = z.zeroDecode(source=encoded)
         self.assertEqual(clear, decoded[: len(clear)])
 
